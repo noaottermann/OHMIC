@@ -64,7 +64,7 @@ class TestDCSolver(unittest.TestCase):
         n_res = self.circuit.create_node(10, 10) # Noeud physiquement distant mais relié par fil
         src = VoltageSourceDC(self.circuit.get_next_dipole_id(), n_src, n_gnd, dc_voltage=5.0)
         self.circuit.add_dipole(src)
-        wire = self.circuit.create_wire(n_src, n_res)
+        self.circuit.create_wire(n_src, n_res)
         res = Resistor(self.circuit.get_next_dipole_id(), n_res, n_gnd, resistance=10.0)
         self.circuit.add_dipole(res)
         

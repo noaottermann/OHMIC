@@ -8,14 +8,14 @@ from utils.translator import Translator
 def main():
 
     app = QApplication(sys.argv)
-    
+
     Translator.load_language("fr")
 
     circuit = Circuit()
     
     window = MainWindow(model=circuit)
     
-    window.show()
+    window.showMaximized()
     
     sys.exit(app.exec_())
 

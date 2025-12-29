@@ -1,0 +1,19 @@
+{
+    "app_title": "Electric System Lab",
+    "menu_file": "File",
+    "menu_edit": "Edit",
+    "menu_view": "View",
+    "menu_options": "Options",
+    "menu_simulation": "Simulation",
+    "menu_recent_files": "Recent Files",
+    "action_new_file": "New File",
+    "action_new_window": "New Window",
+    "action_open": "Open",
+    "action_save": "Save",
+    "action_save_as": "Save As",
+    "action_import": "Import",
+    "action_export": "Export",
+    "action_history": "History",
+    "action_quit": "Quit",
+    "status_ready": "Ready"
+}
