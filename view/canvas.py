@@ -164,7 +164,6 @@ class CircuitScene(QGraphicsScene):
                 closest_node_pos = (nx, ny)
 
         if closest_node_pos and min_dist < THRESHOLD:
-            print(f"[Snap] Aimanté sur le noeud à {closest_node_pos}")
             return closest_node_pos
         
         return self.snap_to_grid(scene_pos)
@@ -300,6 +299,36 @@ class CircuitScene(QGraphicsScene):
             self.removeItem(self.temp_wire_item)
             self.temp_wire_item = None
         self.drawing_wire = False
+
+    def handle_wire_move(self, wire_item):
+        """
+        Met à jour le modèle et reset le visuel
+        """
+        
+        # Calculer les vraies positions
+        raw_pos_a = wire_item.handle_a.scenePos()
+        raw_pos_b = wire_item.handle_b.scenePos()
+
+        # Snapping
+        xa, ya = self.get_snapped_position(raw_pos_a)
+        xb, yb = self.get_snapped_position(raw_pos_b)
+        
+        # Noeud A
+        node_a = self.model.get_node_at(xa, ya)
+        if not node_a:
+            node_a = self.model.create_node(xa, ya)
+        
+        # Noeud B
+        node_b = self.model.get_node_at(xb, yb)
+        if not node_b:
+            node_b = self.model.create_node(xb, yb)
+
+        # On affecte au modèle
+        wire_item.wire.node_a = node_a
+        wire_item.wire.node_b = node_b
+
+        # Reset visuel
+        wire_item.refresh_geometry()
 
     def delete_selection(self):
         """Supprime tous les items sélectionnés"""
