@@ -1,3 +1,5 @@
+import math
+
 from PyQt5.QtWidgets import QGraphicsItem, QStyleOptionGraphicsItem, QStyle
 from PyQt5.QtCore import QRectF, Qt, QPointF
 from PyQt5.QtGui import QPainter, QPen, QColor, QFont, QPainterPath
@@ -39,13 +41,57 @@ class ComponentItem(QGraphicsItem):
 
     def itemChange(self, change, value):
         """
-        Méthode appelée par Qt quand l'état de l'item change
+        Intercepte les changements d'état.
         """
+        # Snapping lors du déplacement
         if change == QGraphicsItem.ItemPositionChange and self.scene():
-            # Mise à jour des coordonnées dans le modèle
             new_pos = value
-            self.component.position = (new_pos.x(), new_pos.y())
+            # On arrondit à la grille
+            grid_size = 20
+            x = round(new_pos.x() / grid_size) * grid_size
+            y = round(new_pos.y() / grid_size) * grid_size
+            
+            # On retourne la position corrigée
+            return QPointF(x, y)
+
         return super().itemChange(change, value)
+
+    def mouseReleaseEvent(self, event):
+        """
+        Quand on lâche le composant après déplacement
+        """
+        super().mouseReleaseEvent(event)
+        
+        # On demande à la scène de mettre à jour les connexions
+        if self.scene():
+            self.scene().handle_component_move(self)
+
+    def update_model_nodes(self):
+        """
+        Recalcule la position réelle des noeuds A et B dans le modèle
+        en fonction de la position du centre et de la rotation.
+        """
+        # Centre du composant
+        cx, cy = self.pos().x(), self.pos().y()
+        rotation = self.rotation()
+        
+        # Distance standard des bornes par rapport au centre
+        offset = 30
+        
+        # Calcul trigonométrique
+        rad = math.radians(rotation)
+        dx = offset * math.cos(rad)
+        dy = offset * math.sin(rad)
+        
+        # Mise à jour des coordonnées des noeuds
+        # Node A
+        self.component.node_a.position = (cx - dx, cy - dy)
+        
+        # Node B
+        self.component.node_b.position = (cx + dx, cy + dy)
+        
+        # Mise à jour de la position du dipôle
+        self.component.position = (cx, cy)
 
     def paint(self, painter, option, widget=None):
         """

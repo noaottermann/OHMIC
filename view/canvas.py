@@ -246,6 +246,26 @@ class CircuitScene(QGraphicsScene):
             item = create_component_item(dipole)
             self.addItem(item)
 
+    def handle_component_move(self, component_item):
+        """
+        Appelé quand un composant a fini de bouger
+        """
+        # Mise à jour des coordonnées des nodes
+        component_item.update_model_nodes()
+        
+        # On récupère les IDs des noeuds de ce composant
+        node_ids = {component_item.component.node_a.id, component_item.component.node_b.id}
+        
+        # On cherche les fils connectés à ces noeuds pour les redessiner
+        for item in self.items():
+            # Si c'est un fil
+            if isinstance(item, WireItem): # Assurez-vous d'avoir importé WireItem
+                wire = item.wire
+                # Si le fil est connecté à l'un des noeuds du composant qui a bougé
+                if wire.node_a.id in node_ids or wire.node_b.id in node_ids:
+                    # On force le fil à recalculer sa géométrie
+                    item.refresh_geometry()
+
     def start_wire_drawing(self, x, y):
         """Initialise le mode dessin de fil"""
         self.drawing_wire = True
