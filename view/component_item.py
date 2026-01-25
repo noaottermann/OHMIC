@@ -42,17 +42,19 @@ class ComponentItem(QGraphicsItem):
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemPositionChange and self.scene():
             new_pos = value
-            grid_size = 20
+            
+            # Taille de la grille
+            grid_size = self.scene().GRID_SIZE
+            
+            # Snapping
             x = round(new_pos.x() / grid_size) * grid_size
             y = round(new_pos.y() / grid_size) * grid_size
             snapped_pos = QPointF(x, y)
 
-            # Mise à jour immédiate des fils connectés
+            # Mise à jour temps réel des fils
             self.scene().update_wires_connected_to(self.component, snapped_pos, self.rotation())
             
             return snapped_pos
-
-        return super().itemChange(change, value)
 
         return super().itemChange(change, value)
 

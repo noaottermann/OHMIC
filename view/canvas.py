@@ -106,7 +106,7 @@ class CircuitScene(QGraphicsScene):
         limit = 1000000 
         self.setSceneRect(-limit, -limit, limit * 2, limit * 2)
         
-        self.grid = Grid(grid_size=20)
+        self.grid = Grid(grid_size=self.GRID_SIZE)
         
         self.current_tool = "pointer"
 
@@ -136,8 +136,9 @@ class CircuitScene(QGraphicsScene):
 
     def snap_to_grid(self, pos):
         """Arrondit une position x,y au point de grille le plus proche"""
-        x = round(pos.x() / self.GRID_SIZE) * self.GRID_SIZE
-        y = round(pos.y() / self.GRID_SIZE) * self.GRID_SIZE
+        gs = self.GRID_SIZE
+        x = round(pos.x() / gs) * gs
+        y = round(pos.y() / gs) * gs
         return x, y
     
     def get_snapped_position(self, scene_pos):

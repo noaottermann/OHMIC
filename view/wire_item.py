@@ -29,17 +29,21 @@ class WireHandle(QGraphicsRectItem):
 
     def mouseMoveEvent(self, event):
         if self._is_dragging:
-            # 1. On calcule la nouvelle position dans le référentiel du PARENT
-            # event.pos() est local au Handle. mapToParent transforme ça vers le Wire.
-            new_pos_in_parent = self.mapToParent(event.pos())
+            # Position de la souris
+            mouse_scene_pos = self.mapToScene(event.pos())
             
-            # 2. On bouge le Handle manuellement
+            # Snapping
+            target_pos = self.scene().get_snapped_position(mouse_scene_pos)
+            target_pos = QPointF(*target_pos)
+
+            # Conversion en position locale du parent
+            new_pos_in_parent = self.parentItem().mapFromScene(target_pos)
+            
+            # Application
             self.setPos(new_pos_in_parent)
             
-            # 3. On met à jour la ligne visuelle
+            # Visuel
             self.parent_wire.update_line_visuals()
-            
-            # 4. On bloque l'événement pour qu'il ne remonte PAS au parent
             event.accept()
         else:
             super().mouseMoveEvent(event)
