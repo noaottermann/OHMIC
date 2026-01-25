@@ -64,7 +64,9 @@ class WireItem(QGraphicsLineItem):
         self.wire = wire_model
         
         self.setPen(QPen(Qt.black, 2))
-        self.setFlags(QGraphicsItem.ItemIsSelectable | QGraphicsItem.ItemIsMovable)
+        self.setFlags(QGraphicsItem.ItemIsSelectable | 
+                      QGraphicsItem.ItemIsMovable | 
+                      QGraphicsItem.ItemSendsGeometryChanges)
         self.setZValue(0) # Le fil est en dessous des poignées
         
         self.handle_a = WireHandle(self)
@@ -97,7 +99,23 @@ class WireItem(QGraphicsLineItem):
         self.setLine(QLineF(self.handle_a.pos(), self.handle_b.pos()))
 
     def itemChange(self, change, value):
-        # Gestion Sélection
+        # --- AJOUT : SNAPPING DU FIL ENTIER ---
+        if change == QGraphicsItem.ItemPositionChange and self.scene():
+            # "value" est la nouvelle position proposée par la souris
+            new_pos = value
+            
+            # On récupère la taille de grille
+            grid_size = self.scene().GRID_SIZE
+            
+            # On arrondit à la grille
+            x = round(new_pos.x() / grid_size) * grid_size
+            y = round(new_pos.y() / grid_size) * grid_size
+            
+            # On renvoie la position corrigée. Qt utilisera celle-ci pour l'affichage.
+            return QPointF(x, y)
+        # --------------------------------------
+
+        # Gestion de la sélection (Code existant à conserver en dessous)
         if change == QGraphicsItem.ItemSelectedChange:
             is_selected = bool(value)
             self.handle_a.setVisible(is_selected)
@@ -107,7 +125,6 @@ class WireItem(QGraphicsLineItem):
             if is_selected:
                 pen.setColor(QColor("#0078d7"))
                 pen.setStyle(Qt.DashLine)
-                # On reste derrière les handles (Z=2), mais devant les autres fils
                 self.setZValue(1) 
             else:
                 pen.setColor(Qt.black)
