@@ -46,7 +46,9 @@ class ComponentItem(QGraphicsItem):
             grid_size = self.scene().GRID_SIZE
             x = round(new_pos.x() / grid_size) * grid_size
             y = round(new_pos.y() / grid_size) * grid_size  
-            return QPointF(x, y)
+            snapped_pos = QPointF(x, y)
+            self.scene().update_wires_connected_to(self.component, snapped_pos, self.rotation())
+            return snapped_pos
 
         return super().itemChange(change, value)
 
