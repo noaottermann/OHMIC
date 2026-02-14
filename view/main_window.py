@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
         make_action("action_filter_inductors", None, self.on_filter_inductors)
         make_action("action_filter_add", None, self.on_filter_add)
        
-       # Edit Actions (Transformées sans lambda)
+       # Edit Actions 
         make_action("action_invert_x", None, self.on_invert_x)
         make_action("action_invert_y", None, self.on_invert_y)
         make_action("action_invert_xy", None, self.on_invert_xy)
@@ -458,7 +458,7 @@ class MainWindow(QMainWindow):
 
     def on_filter_add(self):
         print("Filter Add")
-    # Edit Actions (Transformations)
+
     def on_invert_x(self):
         print("Action: Inverser X")
 
