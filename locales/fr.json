@@ -51,6 +51,8 @@
     "action_show_nodes": "Afficher l'ID des nœuds",
     "action_show_wire_dir": "Afficher la direction du courant",
     "action_center_select": "Centrer sur la sélection",
+    "action_reset_zoom": "Réinitialiser le zoom",
+    "action_fullscreen": "Basculer en plein écran",
     "action_show_components": "Composants",
     "action_show_sim": "Simulation",
     "action_show_graphs": "Graphiques",

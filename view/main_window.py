@@ -118,7 +118,6 @@ class MainWindow(QMainWindow):
         make_action("action_highlight_short", None, self.on_highlight_short_circuit)
         make_action("action_show_components", None, self.on_toggle_view_components)
         make_action("action_show_sim", None, self.on_toggle_view_simulation)
-        make_action("action_show_file", None, self.on_toggle_view_file_explorer)
         make_action("action_show_graphs", None, self.on_toggle_view_graphs)
         make_action("action_show_examples", None, self.on_toggle_view_examples)
         make_action("action_show_toolbar", None, self.on_toggle_view_toolbar)
@@ -304,7 +303,6 @@ class MainWindow(QMainWindow):
         self.menu_show_hide = self.menu_view.addMenu('')
         self.menu_show_hide.addAction(self.custom_actions["action_show_components"])
         self.menu_show_hide.addAction(self.custom_actions["action_show_sim"])
-        self.menu_show_hide.addAction(self.custom_actions["action_show_file"])
         self.menu_show_hide.addAction(self.custom_actions["action_show_graphs"])
         self.menu_show_hide.addAction(self.custom_actions["action_show_examples"])
         self.menu_show_hide.addAction(self.custom_actions["action_show_toolbar"])
@@ -531,9 +529,6 @@ class MainWindow(QMainWindow):
 
     def on_toggle_view_simulation(self):
         print("Fenêtre: Simulation")
-
-    def on_toggle_view_file_explorer(self):
-        print("Fenêtre: Explorateur de fichiers")
 
     def on_toggle_view_graphs(self):
         print("Fenêtre: Graphiques")

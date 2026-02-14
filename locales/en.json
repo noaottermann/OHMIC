@@ -51,6 +51,8 @@
     "action_show_nodes": "Show/Hide Node ID",
     "action_show_wire_dir": "Show/Hide Wire Direction",
     "action_center_select": "Center on Selection",
+    "action_reset_zoom": "Reset Zoom",
+    "action_fullscreen": "Toggle Fullscreen",
     "action_show_components": "Components",
     "action_show_sim": "Simulation",
     "action_show_graphs": "Graphs",
