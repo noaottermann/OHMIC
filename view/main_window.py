@@ -1,12 +1,22 @@
-from PyQt5.QtWidgets import QMainWindow, QAction, QToolBar, QStatusBar, QMessageBox, QApplication, QShortcut
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QAction,
+    QToolBar,
+    QStatusBar,
+    QMessageBox,
+    QApplication,
+    QShortcut,
+    QDockWidget,
+)
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence
 from utils.translator import Translator
 from view.canvas import CircuitView, CircuitScene
+from view.catalog_panel import ComponentCatalogWidget
 
 class MainWindow(QMainWindow):
     """
-    Main window for the ElectricSystemLab application.
+    Main window for the OHMIC application.
     """
 
     def __init__(self, model=None):
@@ -49,6 +59,23 @@ class MainWindow(QMainWindow):
         self.scene = CircuitScene(self.model)
         self.view = CircuitView(self.scene)
         self.setCentralWidget(self.view)
+
+        # Left catalog panel
+        self.setup_catalog_panel()
+
+    def setup_catalog_panel(self):
+        """Create and attach the left component catalog panel."""
+        self.catalog_widget = ComponentCatalogWidget(self)
+        self.catalog_widget.tool_selected.connect(self.set_tool)
+
+        self.catalog_dock = QDockWidget("Components", self)
+        self.catalog_dock.setObjectName("catalogDock")
+        self.catalog_dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
+        self.catalog_dock.setFeatures(
+            QDockWidget.DockWidgetMovable | QDockWidget.DockWidgetFloatable
+        )
+        self.catalog_dock.setWidget(self.catalog_widget)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.catalog_dock)
 
     def create_actions(self):
         """Create all actions for the main window."""
