@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QAction, QToolBar, QStatusBar, QLabel, QMessageBox, QApplication, QShortcut
+from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QAction, QToolBar, QStatusBar, QMessageBox, QApplication, QShortcut
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QKeySequence
 from utils.translator import Translator
@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         self.components_panel = ComponentsPanel()
         self.components_panel.setMinimumWidth(200)
         self.components_panel.setMaximumWidth(300)
+        self.components_panel.tool_selected.connect(self.set_tool)
 
         central_widget = QWidget()
         central_layout = QHBoxLayout(central_widget)
@@ -67,23 +68,6 @@ class MainWindow(QMainWindow):
         central_layout.addWidget(self.components_panel)
         central_layout.addWidget(self.view, 1)
         self.setCentralWidget(central_widget)
-
-        # Left catalog panel
-        self.setup_catalog_panel()
-
-    def setup_catalog_panel(self):
-        """Create and attach the left component catalog panel"""
-        self.catalog_widget = ComponentCatalogWidget(self)
-        self.catalog_widget.tool_selected.connect(self.set_tool)
-
-        self.catalog_dock = QDockWidget("Components", self)
-        self.catalog_dock.setObjectName("catalogDock")
-        self.catalog_dock.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
-        self.catalog_dock.setFeatures(
-            QDockWidget.DockWidgetMovable | QDockWidget.DockWidgetFloatable
-        )
-        self.catalog_dock.setWidget(self.catalog_widget)
-        self.addDockWidget(Qt.LeftDockWidgetArea, self.catalog_dock)
 
     def create_actions(self):
         """Create all actions for the main window"""

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PyQt5.QtCore import Qt, QSize, QPointF, QMimeData
+from PyQt5.QtCore import Qt, QSize, QPointF, QMimeData, pyqtSignal
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont, QDrag
 from PyQt5.QtWidgets import (
 	QWidget,
@@ -17,6 +17,9 @@ from PyQt5.QtWidgets import (
 
 
 class ComponentsPanel(QWidget):
+	# Signal emitted when a component is double-clicked (for tool selection)
+	tool_selected = pyqtSignal(str)
+
 	def __init__(self, parent=None):
 		super().__init__(parent)
 		self.assets_root = Path(__file__).resolve().parents[1] / "assets"
@@ -71,6 +74,7 @@ class ComponentsPanel(QWidget):
 		self._sync_category_item_widths()
 		self.category_list.currentItemChanged.connect(self._on_category_changed)
 		self.category_list.itemClicked.connect(self._on_category_clicked)
+		self.components_list.itemDoubleClicked.connect(self._on_component_double_clicked)
 
 		if self.category_list.count() > 0:
 			self.category_list.setCurrentRow(0)
@@ -255,6 +259,15 @@ class ComponentsPanel(QWidget):
 			return
 		category_key = item.data(Qt.UserRole)
 		self._scroll_to_category(category_key)
+
+	def _on_component_double_clicked(self, item):
+		"""Emit tool_selected signal when a component item is double-clicked."""
+		if item is None:
+			return
+		component_id = item.data(Qt.UserRole)
+		if not component_id or (isinstance(component_id, str) and component_id.startswith("header:")):
+			return
+		self.tool_selected.emit(component_id)
 
 	def _populate_components_all(self):
 		self.components_list.clear()
