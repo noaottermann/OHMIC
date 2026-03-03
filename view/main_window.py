@@ -9,7 +9,7 @@ from view.components_panel import ComponentsPanel
 
 class MainWindow(QMainWindow):
     """
-    Main window of OHMIC
+    Main window of Nodal
     """
     def __init__(self, model=None):
         super().__init__()
